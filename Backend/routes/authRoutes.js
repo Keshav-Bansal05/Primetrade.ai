@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import logger from "../utils/logger.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -72,6 +73,17 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// ---- ADMIN: GET ALL USERS ----
+
+router.get("/users", protect, async (req, res) => {
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).json({ error: "Admins only" });
+  }
+
+  const users = await User.find({}, "name email _id");
+  res.json(users);
 });
 
 export default router;

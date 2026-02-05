@@ -12,7 +12,6 @@ dotenv.config();
 
 const app = express();
 
-// THIS IS IMPORTANT — prints every request in terminal
 app.use(morgan("dev"));
 
 app.use(cors());
