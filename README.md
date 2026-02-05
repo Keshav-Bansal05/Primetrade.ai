@@ -1,47 +1,40 @@
-# 🚀 **Primetrade.ai — Full-Stack Task Manager**
+# 🚀 **Primetrade.ai — Role-Based Task Manager**
 
-<p align="center">
-  <b>A secure, role-based task management system built with modern full-stack technologies.</b>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Frontend-Vite+React-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge" />
-</p>
+A secure, scalable, and modern full-stack task management system with **JWT authentication** and **role-based access (USER vs ADMIN).**
 
 ---
 
-## 🌟 **Project Overview**
+## 🌟 Project Overview
 
-This repository contains a **full-stack Task Management system** built as part of the **Primetrade.ai Backend Intern Assignment**.
+This project was built as part of the **Primetrade.ai Backend Intern Assignment** and demonstrates real-world engineering practices:
 
-It demonstrates real-world engineering practices including:
-
-✔ Secure authentication with **JWT**
-✔ Password hashing using **bcrypt**
+✔ Secure authentication using **JWT**
+✔ Password hashing with **bcrypt**
 ✔ **Role-Based Access Control (USER vs ADMIN)**
-✔ RESTful APIs with proper versioning (`/api/v1`)
+✔ RESTful APIs with versioning (`/api/v1`)
 ✔ Full **CRUD operations** on Tasks
-✔ Clean, modular backend architecture
-✔ Vite + React frontend with protected routes
-✔ API documentation using a **Postman collection**
+✔ Modular backend architecture
+✔ Modern **Vite + React** frontend with protected routes
+✔ **Admin can assign tasks to any user via dropdown**
+✔ API documentation using **Postman collection**
 
 ---
 
-## 🏗️ **Repository Structure**
+## 🏗️ Repository Structure
 
 ```
 Primetrade.ai/
 │
 ├── backend/
 │   ├── server.js
-│   ├── README.md
 │   ├── Primetrade.ai.postman_collection.json
 │   ├── config/
 │   ├── routes/
+│   │   ├── authRoutes.js
+│   │   └── taskRoutes.js
 │   ├── models/
+│   │   ├── User.js
+│   │   └── Task.js
 │   └── middleware/
 │
 └── frontend/
@@ -58,82 +51,77 @@ Primetrade.ai/
             └── Dashboard.jsx
 ```
 
-> ⚠️ **Note:** The actual `.env` file is **not committed to GitHub** (it is ignored via `.gitignore`). You must create it locally as shown below.
+> ⚠️ **Note:** The `.env` file is **not committed to GitHub** (ignored via `.gitignore`). You must create it locally.
 
 ---
 
-## 🛠️ **Tech Stack**
+## 🛠️ Tech Stack
 
-### 🔹 Backend
+### Backend
 
 * Node.js
 * Express.js
 * MongoDB + Mongoose
-* JWT (jsonwebtoken)
+* JWT (`jsonwebtoken`)
 * bcryptjs
 * dotenv
 * cors
+* Winston (logging)
 
-### 🔹 Frontend
+### Frontend
 
 * Vite + React
 * React Router
 * Axios
+* Framer Motion
+* Tailwind CSS
 * LocalStorage for JWT storage
 
 ---
 
-## 🔐 **Core Features**
+## 🔐 Core Features
 
-### ✅ Authentication
+### Authentication
 
 * User Registration
 * Secure Login
 * Password Hashing
 * JWT-based authentication
 
-### ✅ Role-Based Access
+### Role-Based Access
 
-| Role      | Permissions                      |
-| --------- | -------------------------------- |
-| **USER**  | Manage only their own tasks      |
-| **ADMIN** | View and manage all users’ tasks |
+| Role      | Permissions                                               |
+| --------- | --------------------------------------------------------- |
+| **USER**  | Manage only their own tasks                               |
+| **ADMIN** | View all tasks, delete any task, assign tasks to any user |
 
-### ✅ Task Management
+### Task Management
 
 * Create Task
 * View Tasks
 * Update Task
 * Delete Task
 
-### ✅ Frontend UI
+### Admin Features
 
-* Register Page
-* Login Page
-* Protected Dashboard
-* Task CRUD interface
-* Different UI behavior for USER vs ADMIN
+* View all users
+* Assign tasks to any user via dropdown
+* View task owner details
 
 ---
 
-# 🚀 **How to Run the Project (Step-by-Step)**
+# 🚀 How to Run the Project
 
-## ▶️ **1) Backend Setup**
+## 1) Backend Setup
 
 ```bash
 cd backend
 npm install
 ```
 
-### ✅ **2) Create `.env` file (MANDATORY)**
+### Create `.env` file (MANDATORY)
 
-Inside the **backend folder**, create:
-
-```
-backend/.env
-```
-
-and paste this inside it:
+Inside `backend/.env`:
 
 ```
 PORT=5000
@@ -141,13 +129,9 @@ MONGO_URI=mongodb://127.0.0.1:27017/taskDB
 JWT_SECRET=mySuperSecretKey
 ```
 
-> 💡 If you prefer **MongoDB Atlas**, replace `MONGO_URI` with your Atlas connection string.
+> You can also use MongoDB Atlas — just replace `MONGO_URI`.
 
-### ▶️ **3) Start MongoDB**
-
-Make sure your MongoDB service is running locally.
-
-### ▶️ **4) Run Backend**
+### Start Backend
 
 ```bash
 node server.js
@@ -158,7 +142,7 @@ Backend runs at:
 
 ---
 
-## ▶️ **2) Frontend Setup**
+## 2) Frontend Setup
 
 ```bash
 cd frontend
@@ -171,16 +155,17 @@ Frontend runs at:
 
 ---
 
-## 📌 **API Endpoints (v1)**
+## 📌 API Endpoints (v1)
 
-### 🔐 Authentication
+### Authentication
 
 ```
 POST /api/v1/auth/register
 POST /api/v1/auth/login
+GET  /api/v1/auth/users   (Admin only)
 ```
 
-### 📝 Tasks (JWT Required)
+### Tasks (JWT Required)
 
 ```
 GET    /api/v1/tasks
@@ -192,15 +177,38 @@ GET    /api/v1/tasks/admin/all   (Admin only)
 
 ---
 
-## 📄 **Postman API Documentation**
+## 🧠 Admin Task Assignment Flow
 
-A ready-to-import Postman collection is included here:
+### Normal User
+
+```json
+POST /api/v1/tasks
+{
+  "title": "Buy groceries"
+}
+```
+
+### Admin assigning to another user
+
+```json
+POST /api/v1/tasks
+{
+  "title": "Prepare report",
+  "userId": "USER_MONGODB_ID"
+}
+```
+
+---
+
+## 📄 Postman API Documentation
+
+Import this file into Postman:
 
 ```
 backend/Primetrade.ai.postman_collection.json
 ```
 
-**How to import:**
+Steps:
 
 1. Open Postman
 2. Click **Import**
@@ -209,26 +217,31 @@ backend/Primetrade.ai.postman_collection.json
 
 ---
 
-## 📈 **Scalability Considerations**
+## 📈 Scalability & Future Enhancements
 
-This system can be extended using:
-
-* **Redis caching** for frequently accessed data
-* **Nginx load balancing**
-* **Docker containerization**
-* **Microservices architecture**
+* Redis caching
+* Nginx load balancing
+* Docker containerization
+* Microservices architecture
 * Cloud deployment (Render / Railway / AWS)
 
+Possible features:
+
+* Mark task completed
+* Search & filters
+* Pagination
+* Email notifications
+
 ---
 
-## 👨‍💻 **Developed By**
+## 👨‍💻 Developed By
 
 **Keshav Bansal**
-Full-Stack Developer Intern Candidate
+Full-Stack Developer
 
-🔗 GitHub: *https://github.com/Keshav-Bansal05*
-📧 Email: *bansalkeshav8888@gmail.com*
+GitHub: [https://github.com/Keshav-Bansal05](https://github.com/Keshav-Bansal05)
+Email: [bansalkeshav8888@gmail.com](mailto:bansalkeshav8888@gmail.com)
 
 ---
 
-⭐ **If you like this project, don’t forget to star the repo!**
+⭐ If you like this project, please star the repo!
