@@ -17,7 +17,7 @@
 
 This repository contains a **full-stack Task Management system** built as part of the **Primetrade.ai Backend Intern Assignment**.
 
-It demonstrates real-world backend and frontend skills including:
+It demonstrates real-world engineering practices including:
 
 ✔ Secure authentication with **JWT**
 ✔ Password hashing using **bcrypt**
@@ -26,11 +26,11 @@ It demonstrates real-world backend and frontend skills including:
 ✔ Full **CRUD operations** on Tasks
 ✔ Clean, modular backend architecture
 ✔ Vite + React frontend with protected routes
-✔ API documentation using **Postman collection**
+✔ API documentation using a **Postman collection**
 
 ---
 
-## 🏗️ **Architecture**
+## 🏗️ **Repository Structure**
 
 ```
 Primetrade.ai/
@@ -39,7 +39,6 @@ Primetrade.ai/
 │   ├── server.js
 │   ├── README.md
 │   ├── Primetrade.ai.postman_collection.json
-│   ├── .env (sample)
 │   ├── config/
 │   ├── routes/
 │   ├── models/
@@ -58,6 +57,8 @@ Primetrade.ai/
             ├── Register.jsx
             └── Dashboard.jsx
 ```
+
+> ⚠️ **Note:** The actual `.env` file is **not committed to GitHub** (it is ignored via `.gitignore`). You must create it locally as shown below.
 
 ---
 
@@ -82,49 +83,57 @@ Primetrade.ai/
 
 ---
 
-## 🔐 **Features**
+## 🔐 **Core Features**
 
-### 🔹 Authentication
+### ✅ Authentication
 
 * User Registration
 * Secure Login
 * Password Hashing
 * JWT-based authentication
 
-### 🔹 Role-Based Access
+### ✅ Role-Based Access
 
 | Role      | Permissions                      |
 | --------- | -------------------------------- |
 | **USER**  | Manage only their own tasks      |
 | **ADMIN** | View and manage all users’ tasks |
 
-### 🔹 Task Management
+### ✅ Task Management
 
 * Create Task
 * View Tasks
 * Update Task
 * Delete Task
 
-### 🔹 Frontend UI
+### ✅ Frontend UI
 
 * Register Page
 * Login Page
 * Protected Dashboard
-* Task CRUD UI
+* Task CRUD interface
 * Different UI behavior for USER vs ADMIN
 
 ---
 
-## 🚀 **How to Run the Project**
+# 🚀 **How to Run the Project (Step-by-Step)**
 
-### ▶️ Backend Setup
+## ▶️ **1) Backend Setup**
 
 ```bash
 cd backend
 npm install
 ```
 
-Create `.env` inside backend:
+### ✅ **2) Create `.env` file (MANDATORY)**
+
+Inside the **backend folder**, create:
+
+```
+backend/.env
+```
+
+and paste this inside it:
 
 ```
 PORT=5000
@@ -132,7 +141,13 @@ MONGO_URI=mongodb://127.0.0.1:27017/taskDB
 JWT_SECRET=mySuperSecretKey
 ```
 
-Start MongoDB, then run:
+> 💡 If you prefer **MongoDB Atlas**, replace `MONGO_URI` with your Atlas connection string.
+
+### ▶️ **3) Start MongoDB**
+
+Make sure your MongoDB service is running locally.
+
+### ▶️ **4) Run Backend**
 
 ```bash
 node server.js
@@ -143,7 +158,7 @@ Backend runs at:
 
 ---
 
-### ▶️ Frontend Setup
+## ▶️ **2) Frontend Setup**
 
 ```bash
 cd frontend
@@ -158,14 +173,14 @@ Frontend runs at:
 
 ## 📌 **API Endpoints (v1)**
 
-### Authentication
+### 🔐 Authentication
 
 ```
 POST /api/v1/auth/register
 POST /api/v1/auth/login
 ```
 
-### Tasks (JWT Required)
+### 📝 Tasks (JWT Required)
 
 ```
 GET    /api/v1/tasks
@@ -185,7 +200,7 @@ A ready-to-import Postman collection is included here:
 backend/Primetrade.ai.postman_collection.json
 ```
 
-Steps to import:
+**How to import:**
 
 1. Open Postman
 2. Click **Import**
@@ -198,10 +213,10 @@ Steps to import:
 
 This system can be extended using:
 
-* Redis caching
-* Nginx load balancing
-* Docker containerization
-* Microservices architecture
+* **Redis caching** for frequently accessed data
+* **Nginx load balancing**
+* **Docker containerization**
+* **Microservices architecture**
 * Cloud deployment (Render / Railway / AWS)
 
 ---
@@ -211,8 +226,8 @@ This system can be extended using:
 **Keshav Bansal**
 Full-Stack Developer Intern Candidate
 
-🔗 GitHub: *your-profile-link-here*
-📧 Email: *your-email-here*
+🔗 GitHub: *https://github.com/Keshav-Bansal05*
+📧 Email: *bansalkeshav8888@gmail.com*
 
 ---
 
