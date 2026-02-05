@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import logger from "../utils/logger.js";
 
 const router = express.Router();
 
@@ -33,6 +34,8 @@ router.post("/register", async (req, res) => {
       role: validRole,
     });
 
+    logger.info(`New user registered: ${email}`);
+
     res.status(201).json({
       message: "User registered successfully",
       role: user.role,
@@ -42,8 +45,8 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ---------- LOGIN ----------
 router.post("/login", async (req, res) => {
+  logger.info("LOGIN ROUTE ENTERED"); 
   try {
     const { email, password } = req.body;
 
@@ -62,6 +65,8 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
+
+    logger.info(`User logged in: ${email}`);
 
     res.json({ token, role: user.role });
   } catch (error) {

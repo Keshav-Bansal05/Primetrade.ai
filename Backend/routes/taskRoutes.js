@@ -2,6 +2,7 @@ import express from "express";
 import Task from "../models/Task.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { isAdmin } from "../middleware/roleMiddleware.js";
+import logger from "../utils/logger.js";
 
 const router = express.Router();
 
@@ -19,6 +20,9 @@ router.post("/", protect, async (req, res) => {
       description,
       user: req.user.id,
     });
+
+    logger.info(`Task created by user ${req.user.id}`);
+
 
     res.status(201).json(task);
   } catch (error) {
@@ -79,20 +83,31 @@ router.delete("/:id", protect, async (req, res) => {
     const task = await Task.findById(req.params.id);
 
     if (!task) {
+      logger.warn(`Delete attempt on missing task: ${req.params.id}`);
       return res.status(404).json({ error: "Task not found" });
     }
 
-    // Allow only owner OR admin
-    if (task.user.toString() !== req.user.id && req.user.role !== "ADMIN") {
+    const isOwner = task.user.toString() === req.user.id;
+    const isAdmin = req.user.role === "ADMIN";
+
+    if (!isOwner && !isAdmin) {
+      logger.warn(
+        `Unauthorized delete attempt by user ${req.user.id} on task ${req.params.id}`
+      );
       return res.status(403).json({ error: "Not allowed" });
     }
 
     await task.deleteOne();
+
+    logger.info(`Task deleted: ${req.params.id} by user ${req.user.id}`);
+
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
+    logger.error(`Task delete failed: ${error.message}`);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // -------- OPTIONAL: ADMIN-ONLY ENDPOINT --------
 router.get("/admin/all", protect, isAdmin, async (req, res) => {
